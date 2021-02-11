@@ -6,6 +6,14 @@ require "stringio"
 class GetWeatherTest < Minitest::Test
   def canned_weather_hash
     {
+      "current" => {
+        "temp" => "10",
+        "weather" => [
+          {
+            "description" => "Blizzard"
+          }
+        ]
+      },
       "daily" => [
         {
           "temp" => {
@@ -40,11 +48,11 @@ class GetWeatherTest < Minitest::Test
     output_client_hash = get_output_client_hash
     output = output_client_hash["output"]
     client = output_client_hash["client"]
-    forecast = "current"
+    forecast = "daily"
     GetWeather.get_weather(output: output, client: client, forecast: forecast)
     output.rewind
     should_not_equal = "Not successful"
-    refute should_not_equal, output.read.chomp
+    assert_equal true, should_not_equal != output.read.chomp
   end
 
   def test_that_get_daily_prints_temp_and_weather
@@ -56,6 +64,18 @@ class GetWeatherTest < Minitest::Test
     GetWeather.get_weather(output: output, client: client, forecast: forecast)   
     output.rewind
     expected = "Weather for Lat: 41.936748, Long: -88.069309: 2ºF, Snow"
+    assert_equal expected, output.read.chomp
+  end
+
+  def test_that_get_current_prints_temp_and_weather
+    #skip
+    output_client_hash = get_output_client_hash
+    output = output_client_hash["output"]
+    client = output_client_hash["client"]
+    forecast = "current"
+    GetWeather.get_weather(output: output, client: client, forecast: forecast)   
+    output.rewind
+    expected = "Weather for Lat: 41.936748, Long: -88.069309: 10ºF, Blizzard"
     assert_equal expected, output.read.chomp
   end
 
