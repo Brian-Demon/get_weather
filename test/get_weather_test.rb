@@ -90,7 +90,7 @@ class GetWeatherTest < Minitest::Test
     output = StringIO.new
     client = Faraday.new do |builder|
       builder.adapter :test do |stub|
-        stub.get("/data/2.5/onecall?lat=#{41.936748}&lon=#{-88.069309}&appid=#{"a69d47752b3fca28f70d731e9447c84a"}") { |env| [200, {}, JSON.generate(canned_weather_hash)] }
+        stub.get("/data/2.5/onecall?lat=#{41.936748}&lon=#{-88.069309}&units=imperial&exclude=hourly,minutely&appid=#{"a69d47752b3fca28f70d731e9447c84a"}") { |env| [200, {}, JSON.generate(canned_weather_hash)] }
       end
     end
     { "output" => output, "client" => client }
@@ -104,7 +104,7 @@ class GetWeatherTest < Minitest::Test
     forecast = "daily"
     GetWeather.get_weather(output: output, client: client, forecast: forecast)
     output.rewind
-    should_not_equal = "Not successful"
+    should_not_equal = "400 - No Connection"
     assert_equal true, should_not_equal != output.read.chomp
   end
 
@@ -116,7 +116,17 @@ class GetWeatherTest < Minitest::Test
     forecast = "daily"
     GetWeather.get_weather(output: output, client: client, forecast: forecast)   
     output.rewind
-    expected = "Weather for Lat: 41.936748, Long: -88.069309: 2ºF, broken clouds"
+    expected = <<-EOF
+Weather for Lat: 41.936748, Long: -88.069309:
+    
+Temperature: 2ºF
+Weather: broken clouds
+Feels Like: 273.53ºF
+Humidity: 70%
+Clouds Coverage: 60%
+Sunrise at 1608124431
+Sunset at 1608160224
+                    EOF
     assert_equal expected, output.read.chomp
   end
 
@@ -128,7 +138,17 @@ class GetWeatherTest < Minitest::Test
     forecast = "current"
     GetWeather.get_weather(output: output, client: client, forecast: forecast)   
     output.rewind
-    expected = "Weather for Lat: 41.936748, Long: -88.069309: 10ºF, mist"
+    expected = <<-EOF
+Weather for Lat: 41.936748, Long: -88.069309:
+    
+Temperature: 10ºF
+Weather: mist
+Feels Like: 270.4ºF
+Humidity: 96%
+Clouds Coverage: 90%
+Sunrise at 1608124431
+Sunset at 1608160224
+                  EOF
     assert_equal expected, output.read.chomp
   end
 
