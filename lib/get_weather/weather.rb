@@ -1,6 +1,6 @@
 module GetWeather
   class Weather
-    attr_reader :weather_data, :timezone
+    attr_reader :weather_data
 
     def initialize(timezone = "America/Chicago")
       @weather_data = get_weather_data_hash
