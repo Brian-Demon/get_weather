@@ -4,6 +4,7 @@ require_relative "get_weather/version"
 require "faraday"
 require "json"
 require "get_weather/weather"
+require "tzinfo"
 
 module GetWeather
   class Error < StandardError
