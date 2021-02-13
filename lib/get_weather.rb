@@ -40,7 +40,7 @@ Weather for Lat: #{$LAT}, Long: #{$LONG}: #{@temp}ºF, #{@description}
   end
 
   def self.get_weather(output: $stdout, client: faraday_client, forecast: forecast_passed)
-    response = client.get("/data/2.5/onecall?lat=#{$LAT}&lon=#{$LONG}&appid=#{$APPID}")
+    response = client.get("/data/2.5/onecall?lat=#{$LAT}&lon=#{$LONG}&exclude=hourly,minutely&appid=#{$APPID}")
     if response.success?
       weather_hash = JSON.parse(response.body)
       weather = Weather.new()
