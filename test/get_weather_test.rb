@@ -95,16 +95,6 @@ class GetWeatherTest < Minitest::Test
     refute_nil ::GetWeather::VERSION
   end
 
-  # def get_output_client_hash
-  #   output = StringIO.new
-  #   client = Faraday.new do |builder|
-  #     builder.adapter :test do |stub|
-  #       stub.get("/data/2.5/onecall?lat=#{41.936748}&lon=#{-88.069309}&units=imperial&exclude=hourly,minutely&appid=#{"a69d47752b3fca28f70d731e9447c84a"}") { |env| [200, {}, JSON.generate(canned_weather_hash)] }
-  #     end
-  #   end
-  #   { "output" => output, "client" => client }
-  # end
-
   def test_gets_successful_response_from_API
     #skip
     forecast = "daily"
