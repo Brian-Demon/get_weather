@@ -1,9 +1,10 @@
 module GetWeather
   class Weather
-    attr_reader :weather_data
+    attr_reader :weather_data, :timezone
 
-    def initialize()
+    def initialize(timezone = "America/Chicago")
       @weather_data = get_weather_data_hash
+      @timezone = TZInfo::Timezone.get(timezone)
     end
 
     def get_weather_data_hash
@@ -18,10 +19,14 @@ module GetWeather
       }
     end
 
+    def epoch_to_local(time)
+      @timezone.to_local(Time.at(time))
+    end
+
     def get_daily(weather_hash)
       daily_data = weather_hash["daily"][0]
-      @weather_data["sunrise"] = daily_data["sunrise"]
-      @weather_data["sunset"] = daily_data["sunset"]
+      @weather_data["sunrise"] = epoch_to_local(daily_data["sunrise"])
+      @weather_data["sunset"] = epoch_to_local(daily_data["sunset"])
       @weather_data["temp"] = daily_data["temp"]["day"]
       @weather_data["feels like"] = daily_data["feels_like"]["day"]
       @weather_data["humidity"] = daily_data["humidity"]
@@ -32,8 +37,8 @@ module GetWeather
 
     def get_current(weather_hash)
       current_data = weather_hash["current"]
-      @weather_data["sunrise"] = current_data["sunrise"]
-      @weather_data["sunset"] = current_data["sunset"]
+      @weather_data["sunrise"] = epoch_to_local(current_data["sunrise"])
+      @weather_data["sunset"] = epoch_to_local(current_data["sunset"])
       @weather_data["temp"] = current_data["temp"]
       @weather_data["feels like"] = current_data["feels_like"]
       @weather_data["humidity"] = current_data["humidity"]

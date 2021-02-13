@@ -117,8 +117,8 @@ Weather: broken clouds
 Feels Like: 273.53ºF
 Humidity: 70%
 Clouds Coverage: 60%
-Sunrise at 1608124431
-Sunset at 1608160224
+Sunrise at 2020-12-16 07:13:51 -0600
+Sunset at 2020-12-16 17:10:24 -0600
 EOF
     assert_equal expected.chomp, @output.read.chomp
   end
@@ -136,8 +136,8 @@ Weather: mist
 Feels Like: 270.4ºF
 Humidity: 96%
 Clouds Coverage: 90%
-Sunrise at 1608124431
-Sunset at 1608160224
+Sunrise at 2020-12-16 07:13:51 -0600
+Sunset at 2020-12-16 17:10:24 -0600
 EOF
     assert_equal expected.chomp, @output.read.chomp
   end
